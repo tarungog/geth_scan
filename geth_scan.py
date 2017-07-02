@@ -23,7 +23,10 @@ def _query(ip):
             return True
         logging.info("Server response invalid: %s", ip)
         return False
-    except requests.ConnectionError as conn:
+    except (requests.ConnectionError, requests.ReadTimeout) as conn:
+        logging.error("%s", str(conn))
+        return False
+    except requests.ReadTimeout as conn:
         logging.error("%s", str(conn))
         return False
 
